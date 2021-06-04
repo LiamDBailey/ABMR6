@@ -48,7 +48,7 @@ moth <- R6::R6Class(classname = "moth",
       self$mutation_rate <- mutation_rate
       self$world         <- world
       #Colour of moth is assigned randomly on initialization
-      self$colour        <- round(runif(1))
+      self$colour        <- round(runif(1, min = 0, max = 1))
       
     },
     
