@@ -1,5 +1,10 @@
-#' R6 class representing population of all moths in the world
+#' R6 class representing population of multiple moths
+#' 
+#' @description 
+#' R6 class representing population of multiple moths.
+#' 
 #' @export
+#' @import R6
 #' @examples
 #'  set.seed(2L)
 #'  my_world <- world$new()
@@ -10,7 +15,7 @@
 #'  my_population$reproduction()
 #'  print(unlist(lapply(my_population$individuals, function(i) i$colour)))
 
-population <- R6::R6Class(classname = "population",
+population <- R6Class(classname = "population",
   public = list(
     
     ## Attributes #######################
@@ -39,7 +44,25 @@ population <- R6::R6Class(classname = "population",
     },
     
     #' @description
-    #' Compute fitness of all moths.
+    #' Compute fitness of all moths in the population.
+    #' 
+    #' @details
+    #' Run the method `computefitness` of each moth object in the population.
+    #' 
+    #' @examples
+    #' set.seed(123L)
+    #' my_world <- world$new()
+    #' my_pop   <- population$new(N = 50, world = my_world)
+    #' 
+    #' #Fitness of all moths is NA on initialisation
+    #' my_pop$individuals[[1]]$fitness
+    #' 
+    #' #Compute fitness of all moths
+    #' my_pop$computefitness()
+    #' 
+    #' #Plot fitness of moths in the world
+    #' all_fitness <- sapply(my_pop$individuals, function(x){x$fitness}) 
+    #' hist(all_fitness)
     computefitness = function() {
       for (i in 1:length(self$individuals)) {
         self$individuals[[i]]$computefitness()
@@ -48,6 +71,24 @@ population <- R6::R6Class(classname = "population",
     
     #' @description
     #' Change colour of all moths.
+    #' 
+    #' @details
+    #' Run the method `mutation` of each moth object in the population.
+    #' 
+    #' @examples
+    #' set.seed(123L)
+    #' my_world <- world$new()
+    #' my_pop   <- population$new(N = 50, mutation_rate = 0.75, world = my_world)
+    #' 
+    #' #Colour of moths should be ~equal at start
+    #' all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+    #' hist(all_colour)
+    #' 
+    #' #Change colour of all moths with probability defined by `mutation_rate`
+    #' #Colours have changed
+    #' my_pop$mutation()
+    #' all_colour <- sapply(my_pop$individuals, function(x){x$colour}) 
+    #' hist(all_colour)
     mutation = function() {
       for (i in 1:length(self$individuals)) {
         self$individuals[[i]]$mutation()
@@ -56,6 +97,29 @@ population <- R6::R6Class(classname = "population",
     
     #' @description
     #' Moths reproduce with a probability defined by their fitness in the environment.
+    #' 
+    #' @details
+    #' Offspring are clones of their parents (i.e. they have the same colour!)
+    #' 
+    #' @examples 
+    #' set.seed(123L)
+    #' my_world <- world$new()
+    #' my_pop   <- population$new(N = 50, world = my_world)
+    #' 
+    #' #At initialization colour of moths is ~even
+    #' all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+    #' hist(all_colour)
+    #'
+    #' #The world is black (i.e. colour = 1)
+    #' #So black moths will have higher fitness than white moths
+    #' my_world$colour
+    #' my_pop$computefitness()
+    #' 
+    #' #Black moths have higher fitness and more more likely to reproduce
+    #' #After reproduction, black individuals are much more common
+    #' my_pop$reproduction()
+    #' all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+    #' hist(all_colour)
     reproduction = function() {
       N <- length(self$individuals)
       fitnesses <- unlist(lapply(self$individuals, function(ind) ind$fitness))
@@ -85,7 +149,26 @@ population <- R6::R6Class(classname = "population",
     #' @description
     #' Run all demographic methods.
     #' 
+    #' @details
     #' Compute fitness, mutation and reproduction for all moths.
+    #' 
+    #' @examples
+    #' set.seed(123L)
+    #' my_world <- world$new()
+    #' my_pop   <- population$new(N = 50, world = my_world)
+    #' 
+    #' #At initialization colour of moths is ~even
+    #' all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+    #' hist(all_colour)
+    #' 
+    #' #The world is black (i.e. colour = 1)
+    #' #So black moths will have higher fitness than white moths
+    #' my_world$colour
+    #' my_pop$generation()
+    #' 
+    #' #There will be more black moths in the next generation
+    #' all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+    #' hist(all_colour)
     generation = function(){
       self$computefitness()
       self$mutation()
@@ -93,14 +176,3 @@ population <- R6::R6Class(classname = "population",
     }
   )
 )
-
-# if (example) {
-#   set.seed(2L)
-#   my_world <- World$new()
-#   my_population <- Population$new(N = 4, world = my_world)
-#   my_population$individuals[[1]]$colour <- 1
-#   my_population$computefitness()
-#   print(unlist(lapply(my_population$individuals, function(i) i$colour)))
-#   my_population$reproduction()
-#   print(unlist(lapply(my_population$individuals, function(i) i$colour)))
-# }

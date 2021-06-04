@@ -1,5 +1,10 @@
 #' R6 class representing an individual moth
+#' 
+#' @description 
+#' R6 class representing an individual moth.
+#' 
 #' @export
+#' @import R6
 #' @examples
 #' #Create a world in which the moth lives
 #' example_world <- world$new()
@@ -14,7 +19,7 @@
 #' example_moth$computefitness()
 #' example_moth$fitness
 
-moth <- R6::R6Class(classname = "moth",
+moth <- R6Class(classname = "moth",
   public = list(
     
     ## Attributes #######################
@@ -55,9 +60,24 @@ moth <- R6::R6Class(classname = "moth",
     #' @description
     #' Change moth colour
     #' 
-    #' Moth colour will change with a probability defind by attribute
+    #' @details 
+    #' Moth colour will change with a probability defined by attribute
     #' `mutation_rate`
-    
+    #' 
+    #' @examples
+    #' #Moth with low mutation rate is very unlikely to change colour
+    #' set.seed(123L)
+    #' my_world <- world$new()
+    #' low_mutation_moth  <- moth$new(mutation_rate = 1e-10, world = my_world)
+    #' low_mutation_moth$colour
+    #' low_mutation_moth$mutation()
+    #' low_mutation_moth$colour
+    #' 
+    #' #Moth with mutation rate 1 is almost guaranteed to change colour
+    #' high_mutation_moth <- moth$new(mutation_rate = 1, world = my_world)
+    #' high_mutation_moth$colour
+    #' high_mutation_moth$mutation()
+    #' high_mutation_moth$colour
     mutation = function() {
       if (runif(n = 1) < self$mutation_rate) {
         self$colour <- abs(self$colour - 1)
@@ -67,37 +87,29 @@ moth <- R6::R6Class(classname = "moth",
     #' @description
     #' Compute fitness of individual in current environment.
     #' 
+    #' @details
     #' Compare colour of moth to the colour of the world and update attribute
-    #' `fitness` accordingly.
+    #' `fitness` accordingly. Fitness can be either 0.5 or 1.
+    #' 
+    #' @examples 
+    #' set.seed(123L)
+    #' my_world <- world$new()
+    #' my_moth  <- moth$new(world = my_world)
+    #' 
+    #' #World is black (i.e. colour = 1) and the moth is white (i.e. colour = 0)
+    #' #Therefore, fitness is lower (0.5)
+    #' my_world$colour
+    #' my_moth$colour
+    #' my_moth$computefitness()
+    #' my_moth$fitness
+    #' 
+    #' #If the world were also white, moth fitness is 1.
+    #' my_world$colour <- 0
+    #' my_moth$computefitness()
+    #' my_moth$fitness
     computefitness = function() {
       self$fitness <- abs(self$world$colour + self$colour - 1)*0.5 + 0.5
     }
   )
 )
-
-# if (example) {
-#   my_world <- World$new()
-#   my_butterfly <- Butterfly$new(mutation_rate = 1e-1, world = my_world)
-#   my_world$colour
-#   my_butterfly$colour
-#   my_butterfly$computefitness()
-#   my_butterfly$fitness
-#   my_world$colour <- 1
-#   my_butterfly$computefitness()
-#   my_butterfly$fitness
-#   my_butterfly$colour <- 1
-#   my_butterfly$computefitness()
-#   my_butterfly$fitness
-#   
-#   my_world <- World$new(period = 10)
-#   my_butterfly <- Butterfly$new(mutation_rate = 1e-1, world = my_world)
-#   plot(NULL, ylim = c(0, 1), xlim = c(1, 100), xlab = "time", ylab = "fitness", las = 1)
-#   for (t in 1:100) {
-#     my_world$moveforward()
-#     abline(v = t, col = my_world$colour, lwd = 5)
-#     my_butterfly$mutation()
-#     my_butterfly$computefitness()
-#     points(t, my_butterfly$fitness, col = 1 - my_butterfly$colour, bg = my_butterfly$colour, pch = 21)
-#   }
-# }
 

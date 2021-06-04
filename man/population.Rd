@@ -2,11 +2,9 @@
 % Please edit documentation in R/population.R
 \name{population}
 \alias{population}
-\title{R6 class representing population of all moths in the world}
+\title{R6 class representing population of multiple moths}
 \description{
-R6 class representing population of all moths in the world
-
-R6 class representing population of all moths in the world
+R6 class representing population of multiple moths.
 }
 \examples{
  set.seed(2L)
@@ -17,6 +15,86 @@ R6 class representing population of all moths in the world
  print(unlist(lapply(my_population$individuals, function(i) i$colour)))
  my_population$reproduction()
  print(unlist(lapply(my_population$individuals, function(i) i$colour)))
+
+## ------------------------------------------------
+## Method `population$computefitness`
+## ------------------------------------------------
+
+set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, world = my_world)
+
+#Fitness of all moths is NA on initialisation
+my_pop$individuals[[1]]$fitness
+
+#Compute fitness of all moths
+my_pop$computefitness()
+
+#Plot fitness of moths in the world
+all_fitness <- sapply(my_pop$individuals, function(x){x$fitness}) 
+hist(all_fitness)
+
+## ------------------------------------------------
+## Method `population$mutation`
+## ------------------------------------------------
+
+set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, mutation_rate = 0.75, world = my_world)
+
+#Colour of moths should be ~equal at start
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+#Change colour of all moths with probability defined by `mutation_rate`
+#Colours have changed
+my_pop$mutation()
+all_colour <- sapply(my_pop$individuals, function(x){x$colour}) 
+hist(all_colour)
+
+## ------------------------------------------------
+## Method `population$reproduction`
+## ------------------------------------------------
+
+set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, world = my_world)
+
+#At initialization colour of moths is ~even
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+#The world is black (i.e. colour = 1)
+#So black moths will have higher fitness than white moths
+my_world$colour
+my_pop$computefitness()
+
+#Black moths have higher fitness and more more likely to reproduce
+#After reproduction, black individuals are much more common
+my_pop$reproduction()
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+## ------------------------------------------------
+## Method `population$generation`
+## ------------------------------------------------
+
+set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, world = my_world)
+
+#At initialization colour of moths is ~even
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+#The world is black (i.e. colour = 1)
+#So black moths will have higher fitness than white moths
+my_world$colour
+my_pop$generation()
+
+#There will be more black moths in the next generation
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -64,9 +142,33 @@ An R6 object of class 'population'
 \if{html}{\out{<a id="method-computefitness"></a>}}
 \if{latex}{\out{\hypertarget{method-computefitness}{}}}
 \subsection{Method \code{computefitness()}}{
-Compute fitness of all moths.
+Compute fitness of all moths in the population.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{population$computefitness()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Run the method `computefitness` of each moth object in the population.
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, world = my_world)
+
+#Fitness of all moths is NA on initialisation
+my_pop$individuals[[1]]$fitness
+
+#Compute fitness of all moths
+my_pop$computefitness()
+
+#Plot fitness of moths in the world
+all_fitness <- sapply(my_pop$individuals, function(x){x$fitness}) 
+hist(all_fitness)
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -79,6 +181,30 @@ Change colour of all moths.
 \if{html}{\out{<div class="r">}}\preformatted{population$mutation()}\if{html}{\out{</div>}}
 }
 
+\subsection{Details}{
+Run the method `mutation` of each moth object in the population.
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, mutation_rate = 0.75, world = my_world)
+
+#Colour of moths should be ~equal at start
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+#Change colour of all moths with probability defined by `mutation_rate`
+#Colours have changed
+my_pop$mutation()
+all_colour <- sapply(my_pop$individuals, function(x){x$colour}) 
+hist(all_colour)
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-reproduction"></a>}}
@@ -89,16 +215,70 @@ Moths reproduce with a probability defined by their fitness in the environment.
 \if{html}{\out{<div class="r">}}\preformatted{population$reproduction()}\if{html}{\out{</div>}}
 }
 
+\subsection{Details}{
+Offspring are clones of their parents (i.e. they have the same colour!)
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, world = my_world)
+
+#At initialization colour of moths is ~even
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+#The world is black (i.e. colour = 1)
+#So black moths will have higher fitness than white moths
+my_world$colour
+my_pop$computefitness()
+
+#Black moths have higher fitness and more more likely to reproduce
+#After reproduction, black individuals are much more common
+my_pop$reproduction()
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-generation"></a>}}
 \if{latex}{\out{\hypertarget{method-generation}{}}}
 \subsection{Method \code{generation()}}{
 Run all demographic methods.
-
-Compute fitness, mutation and reproduction for all moths.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{population$generation()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Compute fitness, mutation and reproduction for all moths.
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{set.seed(123L)
+my_world <- world$new()
+my_pop   <- population$new(N = 50, world = my_world)
+
+#At initialization colour of moths is ~even
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+
+#The world is black (i.e. colour = 1)
+#So black moths will have higher fitness than white moths
+my_world$colour
+my_pop$generation()
+
+#There will be more black moths in the next generation
+all_colour <- sapply(my_pop$individuals, function(x){x$colour})
+hist(all_colour)
+}
+\if{html}{\out{</div>}}
+
 }
 
 }

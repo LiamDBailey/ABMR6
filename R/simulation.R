@@ -1,16 +1,25 @@
+#' R6 class representing a simulation of the peppered moth system
+#' 
+#' @description 
 #' R6 class representing a simulation of the peppered moth system.
+#' 
+#' @details
+#' Used to generate a world with N peppered moth individuals that can be either black
+#' or white. Method `run()` can be used to simulate changes in moth colour over time
+#' as the colour of the world changes.
+#' 
 #' @export
+#' @import R6
 #' @examples
 #' simu <- simulation$new(years = 200, N = 500, mutation_rate = 1e-2, period = 50)
 #' simu$output
 #' simu$run()
 #' simu$plot()
-
-simulation <- R6::R6Class(classname = "simulation",
+simulation <- R6Class(classname = "simulation",
   public = list(
     
     ## Attributes #######################
-    
+
     #' @field world R6 object of class world. World to simulate.
     world = NA,
     
@@ -48,6 +57,7 @@ simulation <- R6::R6Class(classname = "simulation",
     #' @description
     #' Run simulation.
     #' 
+    #' @details
     #' Simulation will run for a number of time steps defined by `years` attribute.
     run = function(){
       time <- system.time({

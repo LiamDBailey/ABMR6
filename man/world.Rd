@@ -2,11 +2,14 @@
 % Please edit documentation in R/world.R
 \name{world}
 \alias{world}
-\title{R6 class representing the world in which the moths live.}
+\title{R6 class representing the world in which the moths live}
 \description{
-R6 class representing the world in which the moths live.
-
-R6 class representing the world in which the moths live.
+R6 class representing the world in which the moths live
+}
+\details{
+Just like moths, the world has a colour either 0 (white) or 1 (black). During a
+simulation, the colour of the world will change with a frequency defined by the
+attribute `period`.
 }
 \examples{
 my_world <- world$new(period = 50)
@@ -21,6 +24,34 @@ for (t in 1:1000) {
   my_world$moveforward()
   abline(v = t, col = my_world$colour, lwd = 5)
 }
+
+## ------------------------------------------------
+## Method `world$computecolour`
+## ------------------------------------------------
+
+#Create a world that should change colour every 50 timesteps
+set.seed(123L)
+my_world <- world$new(period = 50)
+
+#Colour of world starts as black (i.e. 1)
+my_world$colour
+
+#Once time reaches 50, colour will change to white (i.e. 0)
+my_world$time <- 50
+my_world$computecolour()
+my_world$colour
+
+## ------------------------------------------------
+## Method `world$moveforward`
+## ------------------------------------------------
+
+my_world <- world$new(period = 20)
+#Starts with time 1
+my_world$time
+
+#Moves to time 2 after moveforward
+my_world$moveforward()
+my_world$time
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -67,10 +98,31 @@ An R6 object of class 'world'
 \if{latex}{\out{\hypertarget{method-computecolour}{}}}
 \subsection{Method \code{computecolour()}}{
 Change colour of the world.
-
-World will change colour after a set period.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{world$computecolour()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+World will change colour at a given frequency specified by the
+attribute `period`.
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{#Create a world that should change colour every 50 timesteps
+set.seed(123L)
+my_world <- world$new(period = 50)
+
+#Colour of world starts as black (i.e. 1)
+my_world$colour
+
+#Once time reaches 50, colour will change to white (i.e. 0)
+my_world$time <- 50
+my_world$computecolour()
+my_world$colour
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -79,11 +131,27 @@ World will change colour after a set period.
 \if{latex}{\out{\hypertarget{method-moveforward}{}}}
 \subsection{Method \code{moveforward()}}{
 Advance time by 1.
-
-Time will move forward by 1, after which we check to see
-if the colour of the world will change.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{world$moveforward()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Time of the world will move forward by 1, after which we check to see
+if the colour of the world should change given the attribute `period`.
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{my_world <- world$new(period = 20)
+#Starts with time 1
+my_world$time
+
+#Moves to time 2 after moveforward
+my_world$moveforward()
+my_world$time
+}
+\if{html}{\out{</div>}}
+
 }
 
 }

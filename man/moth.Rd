@@ -4,9 +4,7 @@
 \alias{moth}
 \title{R6 class representing an individual moth}
 \description{
-R6 class representing an individual moth
-
-R6 class representing an individual moth
+R6 class representing an individual moth.
 }
 \examples{
 #Create a world in which the moth lives
@@ -21,6 +19,44 @@ example_moth$fitness
 #Compute fitness and then print it
 example_moth$computefitness()
 example_moth$fitness
+
+## ------------------------------------------------
+## Method `moth$mutation`
+## ------------------------------------------------
+
+#Moth with low mutation rate is very unlikely to change colour
+set.seed(123L)
+my_world <- world$new()
+low_mutation_moth  <- moth$new(mutation_rate = 1e-10, world = my_world)
+low_mutation_moth$colour
+low_mutation_moth$mutation()
+low_mutation_moth$colour
+
+#Moth with mutation rate 1 is almost guaranteed to change colour
+high_mutation_moth <- moth$new(mutation_rate = 1, world = my_world)
+high_mutation_moth$colour
+high_mutation_moth$mutation()
+high_mutation_moth$colour
+
+## ------------------------------------------------
+## Method `moth$computefitness`
+## ------------------------------------------------
+
+set.seed(123L)
+my_world <- world$new()
+my_moth  <- moth$new(world = my_world)
+
+#World is black (i.e. colour = 1) and the moth is white (i.e. colour = 0)
+#Therefore, fitness is lower (0.5)
+my_world$colour
+my_moth$colour
+my_moth$computefitness()
+my_moth$fitness
+
+#If the world were also white, moth fitness is 1.
+my_world$colour <- 0
+my_moth$computefitness()
+my_moth$fitness
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -71,11 +107,33 @@ An R6 object of class 'moth'
 \if{latex}{\out{\hypertarget{method-mutation}{}}}
 \subsection{Method \code{mutation()}}{
 Change moth colour
-
-Moth colour will change with a probability defind by attribute
-`mutation_rate`
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{moth$mutation()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Moth colour will change with a probability defined by attribute
+`mutation_rate`
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{#Moth with low mutation rate is very unlikely to change colour
+set.seed(123L)
+my_world <- world$new()
+low_mutation_moth  <- moth$new(mutation_rate = 1e-10, world = my_world)
+low_mutation_moth$colour
+low_mutation_moth$mutation()
+low_mutation_moth$colour
+
+#Moth with mutation rate 1 is almost guaranteed to change colour
+high_mutation_moth <- moth$new(mutation_rate = 1, world = my_world)
+high_mutation_moth$colour
+high_mutation_moth$mutation()
+high_mutation_moth$colour
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -84,11 +142,35 @@ Moth colour will change with a probability defind by attribute
 \if{latex}{\out{\hypertarget{method-computefitness}{}}}
 \subsection{Method \code{computefitness()}}{
 Compute fitness of individual in current environment.
-
-Compare colour of moth to the colour of the world and update attribute
-`fitness` accordingly.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{moth$computefitness()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Compare colour of moth to the colour of the world and update attribute
+`fitness` accordingly. Fitness can be either 0.5 or 1.
+}
+
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{set.seed(123L)
+my_world <- world$new()
+my_moth  <- moth$new(world = my_world)
+
+#World is black (i.e. colour = 1) and the moth is white (i.e. colour = 0)
+#Therefore, fitness is lower (0.5)
+my_world$colour
+my_moth$colour
+my_moth$computefitness()
+my_moth$fitness
+
+#If the world were also white, moth fitness is 1.
+my_world$colour <- 0
+my_moth$computefitness()
+my_moth$fitness
+}
+\if{html}{\out{</div>}}
+
 }
 
 }

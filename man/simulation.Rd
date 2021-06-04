@@ -2,11 +2,14 @@
 % Please edit documentation in R/simulation.R
 \name{simulation}
 \alias{simulation}
-\title{R6 class representing a simulation of the peppered moth system.}
+\title{R6 class representing a simulation of the peppered moth system}
 \description{
 R6 class representing a simulation of the peppered moth system.
-
-R6 class representing a simulation of the peppered moth system.
+}
+\details{
+Used to generate a world with N peppered moth individuals that can be either black
+or white. Method `run()` can be used to simulate changes in moth colour over time
+as the colour of the world changes.
 }
 \examples{
 simu <- simulation$new(years = 200, N = 500, mutation_rate = 1e-2, period = 50)
@@ -67,10 +70,12 @@ An R6 object of class 'simulation'
 \if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
 Run simulation.
-
-Simulation will run for a number of time steps defined by `years` attribute.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{simulation$run()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+Simulation will run for a number of time steps defined by `years` attribute.
 }
 
 }
